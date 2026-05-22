@@ -1,0 +1,8 @@
+-- ---Creación de Tabla cursos
+-- create table public.cursos (
+--   id serial primary key,
+--   nombre text,
+--   modalidad text,
+--   creado timestamptz not null default now()
+--   Horas int not null
+-- );
