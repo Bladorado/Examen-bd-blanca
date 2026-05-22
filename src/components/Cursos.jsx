@@ -2,10 +2,11 @@
 
 import { supabase } from "@/app/utils/supabase/client";
 import useCursoStore from "@/store/useCursoStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 export default function Cursos() {
+
 
     const cursos = useCursoStore((state) => state.cursos);
 
@@ -13,11 +14,36 @@ export default function Cursos() {
 
 
     const [editandoId, setEditandoId] = useState(null);
+    const setCursos = useCursoStore((state) => state.setCursos);
 
     const [formData, setFormData] = useState({
-        titulo: "",
-        descripcion: "",
+        nombre: "",
+        modalidad: "",
     });
+
+
+    useEffect(() => {
+
+        const obtenerCursos = async () => {
+
+            const { data, error } = await supabase
+                .from("cursos")
+                .select("*");
+
+            if (error) {
+                console.log(error);
+                return;
+            }
+
+            console.log(data);
+
+            setCursos(data);
+        };
+
+        obtenerCursos();
+
+    }, [setCursos]);
+
 
     //  Guardar cambios en Supabase + Zustand
     const handleEditar = async (id) => {
@@ -25,8 +51,8 @@ export default function Cursos() {
         const { data, error } = await supabase
             .from("cursos")
             .update({
-                titulo: formData.titulo,
-                descripcion: formData.descripcion,
+                nombre: formData.nombre,
+                modalidad: formData.modalidad,
             })
             .eq("id", id)
             .select()
@@ -65,11 +91,11 @@ export default function Cursos() {
                             <>
                                 <input
                                     className="border p-2 w-full mb-2"
-                                    value={formData.titulo}
+                                    value={formData.nombre}
                                     onChange={(e) =>
                                         setFormData({
                                             ...formData,
-                                            titulo: e.target.value,
+                                            nombre: e.target.value,
                                         })
                                     }
                                     placeholder="Título"
@@ -77,14 +103,14 @@ export default function Cursos() {
 
                                 <textarea
                                     className="border p-2 w-full"
-                                    value={formData.nombre}
+                                    value={formData.modalidad}
                                     onChange={(e) =>
                                         setFormData({
                                             ...formData,
-                                            descripcion: e.target.value,
+                                            modalidad: e.target.value,
                                         })
                                     }
-                                    placeholder="Descripción"
+                                    placeholder="modalidad"
                                 />
 
                                 <div className="mt-2 flex gap-2">
@@ -109,7 +135,7 @@ export default function Cursos() {
                             <>
 
                                 <h3 className="text-xl font-semibold">
-                                    {curso.titulo}
+                                    {curso.nombre}
                                 </h3>
 
                                 <p className="text-gray-600 mt-2">
@@ -120,8 +146,8 @@ export default function Cursos() {
                                     onClick={() => {
                                         setEditandoId(curso.id);
                                         setFormData({
-                                            titulo: curso.titulo,
                                             nombre: curso.nombre,
+                                            modalidad: curso.modalidad,
                                         });
                                     }}
                                     className="mt-3 bg-blue-500 text-white px-3 py-1 rounded"

@@ -9,6 +9,8 @@ const useCursoStore = create(
 
             cursos: [],
 
+              setCursos: (cursos) => set({ cursos }),
+
             agregarCurso: (nuevaCurso) =>
                 set((state) => ({
                     cursos: [...state.cursos, nuevaCurso],

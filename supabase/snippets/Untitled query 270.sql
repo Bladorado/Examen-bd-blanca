@@ -1,8 +1,14 @@
--- ---Creación de Tabla cursos
+-- drop table if exists public.cursos;
+
 -- create table public.cursos (
 --   id serial primary key,
---   nombre text,
+--   nombre text not null,
 --   modalidad text,
+--   horas int not null,
 --   creado timestamptz not null default now()
---   Horas int not null
 -- );
+
+-- insert into cursos (nombre, modalidad, horas)
+-- values
+-- ('React', 'Online', 40),
+-- ('Next.js', 'Presencial', 60);
